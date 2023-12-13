@@ -49,8 +49,6 @@ const handleLogin = () => {
         .finally(() => {
           loading.value = false
         })
-    } else {
-      console.error("表单校验不通过", fields)
     }
   })
 }

@@ -7,7 +7,6 @@ import SelectLayoutMode from "./SelectLayoutMode.vue"
 import { Refresh } from "@element-plus/icons-vue"
 
 const settingsStore = useSettingsStore()
-
 /** 使用 storeToRefs 将提取的属性保持其响应性 */
 const {
   layoutMode,
@@ -24,7 +23,7 @@ const {
   showGreyMode,
   showColorWeakness
 } = storeToRefs(settingsStore)
-
+debugger
 /** 定义 switch 设置项 */
 const switchSettings = {
   显示标签栏: showTagsView,

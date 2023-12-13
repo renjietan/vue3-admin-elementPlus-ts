@@ -23,7 +23,6 @@ interface FetchSelectProps {
 
 export function useFetchSelect(props: FetchSelectProps) {
   const { api } = props
-
   const loading = ref<boolean>(false)
   const options = ref<SelectOption[]>([])
   const value = ref<OptionValue>("")
