@@ -1,12 +1,19 @@
 <template>
   <div>
-    <!-- <Echats :style="{ width: '100%', height: '100%' }" :option="options"></Echats> -->
+    <Pagination @pagination="getList" :total="data.total" v-model:page="data.page" v-model:pageSize="data.pageSize"></Pagination>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue"
 import Echats from "@/components/Echats/index.vue"
+import Pagination from "@/components/Pagination/index.vue"
+const data = reactive({
+  page: 1,
+  pageSize: 10,
+  total: 100
+})
+
 const options = ref({
   xAxis: {
     type: "category",
@@ -25,4 +32,7 @@ const options = ref({
     }
   ]
 })
+const getList = (a, b) => {
+  console.log(a,b);
+}
 </script>
