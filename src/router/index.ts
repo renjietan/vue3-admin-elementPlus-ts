@@ -62,9 +62,9 @@ export const constantRoutes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: "/table",
+    path: "/file-manager",
     component: Layouts,
-    redirect: "/table/element-plus",
+    redirect: "/file-manager",
     name: "Table",
     meta: {
       title: "表格",
@@ -72,100 +72,11 @@ export const constantRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: "element-plus",
-        component: () => import("@/views/table/element-plus/index.vue"),
-        name: "ElementPlus",
+        path: "",
+        component: () => import("@/views/File-Manager/index.vue"),
+        name: "FileManager",
         meta: {
-          title: "Element Plus",
-          keepAlive: true
-        }
-      },
-      {
-        path: "vxe-table",
-        component: () => import("@/views/table/vxe-table/index.vue"),
-        name: "VxeTable",
-        meta: {
-          title: "Vxe Table",
-          keepAlive: true
-        }
-      }
-    ]
-  },
-  {
-    path: "/menu",
-    component: Layouts,
-    redirect: "/menu/menu1",
-    name: "Menu",
-    meta: {
-      title: "多级路由",
-      svgIcon: "menu"
-    },
-    children: [
-      {
-        path: "menu1",
-        component: () => import("@/views/menu/menu1/index.vue"),
-        redirect: "/menu/menu1/menu1-1",
-        name: "Menu1",
-        meta: {
-          title: "menu1"
-        },
-        children: [
-          {
-            path: "menu1-1",
-            component: () => import("@/views/menu/menu1/menu1-1/index.vue"),
-            name: "Menu1-1",
-            meta: {
-              title: "menu1-1",
-              keepAlive: true
-            }
-          },
-          {
-            path: "menu1-2",
-            component: () => import("@/views/menu/menu1/menu1-2/index.vue"),
-            redirect: "/menu/menu1/menu1-2/menu1-2-1",
-            name: "Menu1-2",
-            meta: {
-              title: "menu1-2"
-            },
-            children: [
-              {
-                path: "menu1-2-1",
-                component: () => import("@/views/menu/menu1/menu1-2/menu1-2-1/index.vue"),
-                name: "Menu1-2-1",
-                meta: {
-                  title: "menu1-2-1",
-                  keepAlive: true
-                }
-              },
-              {
-                path: "menu1-2-2",
-                component: () => import("@/views/menu/menu1/menu1-2/menu1-2-2/index.vue"),
-                name: "Menu1-2-2",
-                meta: {
-                  title: "menu1-2-2",
-                  keepAlive: true
-                }
-              }
-            ]
-          },
-          {
-            path: "menu1-3",
-            component: () => import("@/views/menu/menu1/menu1-3/index.vue"),
-            name: "Menu1-3",
-            meta: {
-              title: "menu1-3",
-              keepAlive: true
-            }
-          }
-        ]
-      },
-      {
-        path: "menu2",
-        component: () => import("@/views/menu/menu2/index.vue"),
-        name: "Menu2",
-        meta: {
-          title: "menu2",
-          keepAlive: true
+          title: "文件管理"
         }
       }
     ]

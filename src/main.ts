@@ -17,6 +17,9 @@ import "vxe-table/lib/style.css"
 import "vxe-table-plugin-element/dist/style.css"
 import "@/styles/index.scss"
 
+//componnts
+import Pagination from "@/components/Pagination/index.vue"
+
 const app = createApp(App)
 
 /** 加载插件 */
@@ -27,6 +30,7 @@ loadSvg(app)
 loadDirectives(app)
 
 app.use(store).use(router)
+app.component("Pagination", Pagination)
 router.isReady().then(() => {
   app.mount("#app")
 })

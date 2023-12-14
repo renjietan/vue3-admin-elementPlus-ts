@@ -1,0 +1,32 @@
+.container {
+  margin-top: 15px;
+  &-filter {
+    padding: 10px 15px;
+    margin: 0 0 15px 0;
+    background: white;
+    box-shadow: var(--v3-box-shadow);
+    display: flex;
+    justify-content: space-between;
+    .el-input--small .el-input__inner {
+      width: 200px;
+    }
+    .el-date-editor {
+      width: 200px;
+    }
+    &-left {
+      display: flex;
+      align-items: center;
+    }
+
+    &-right {
+      color: #409eff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+  }
+
+  &-content {
+    padding: 15px;
+    background: white;
+  }
+}

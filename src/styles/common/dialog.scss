@@ -1,0 +1,10 @@
+.el-dialog {
+  margin: 15vh auto;
+  overflow-y: scroll !important;
+  overflow-x: hidden;
+  max-height: 70vh;
+
+  &__body {
+    padding: 10px 20px;
+  }
+}
