@@ -65,10 +65,10 @@ export const constantRoutes: RouteRecordRaw[] = [
     path: "/file-manager",
     component: Layouts,
     redirect: "/file-manager",
-    name: "Table",
+    name: "File",
     meta: {
-      title: "表格",
-      elIcon: "Grid"
+      title: "文件管理",
+      elIcon: "Folder"
     },
     children: [
       {
@@ -77,6 +77,26 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "FileManager",
         meta: {
           title: "文件管理"
+        }
+      }
+    ]
+  },
+  {
+    path: "/AI",
+    component: Layouts,
+    redirect: "/AI",
+    name: "AI",
+    meta: {
+      title: "AI情报研究助手",
+      elIcon: "UserFilled"
+    },
+    children: [
+      {
+        path: "",
+        component: () => import("@/views/AI/index.vue"),
+        name: "UserFilled",
+        meta: {
+          title: "AI情报研究助手"
         }
       }
     ]

@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive, computed, defineProps, watch, onUnmounted } from "vue"
+import { ref, onMounted, reactive, computed, defineProps, watch, onUnmounted, defineEmits } from "vue"
 const props = defineProps({
   text: {
     type: String,
@@ -26,6 +26,8 @@ const props = defineProps({
     default: "100px"
   }
 })
+
+const $emit = defineEmits(['writing'])
 //文本数据
 let text = ""
 //展示数据
@@ -72,7 +74,6 @@ onMounted(() => {
   fn(140)
 })
 onUnmounted(() => {
-  debugger
   if (timer != null) {
     clearInterval(timer)
     timer = null
@@ -80,7 +81,6 @@ onUnmounted(() => {
 })
 
 //打字机
-
 const fn = (time: number) => {
   //计数器
   let counter: number = 0
@@ -100,14 +100,11 @@ const fn = (time: number) => {
     //调用获取元素位置函数
     getElementLocation()
   }
-
   //定时执行函数
-
   timer = setInterval(typeWriter, time)
 }
 
 //获取元素位置作为光标移动的位置
-
 const getElementLocation = () => {
   if (getSpanElementNode.value !== null) {
     cursorPosition.x = getSpanElementNode.value.offsetLeft + 20

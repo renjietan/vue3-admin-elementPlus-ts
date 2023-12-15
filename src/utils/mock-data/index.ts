@@ -27,3 +27,45 @@ export function getRandomString(length: number): string {
   }
   return result
 }
+
+/**
+ * @description 可转换的语言
+ * @author 谭人杰
+ * @date 2023-12-14 23:42:25
+ */
+export const lan_opt = [
+  {
+    label: "翻译",
+    value: "翻译",
+    children: [
+      {
+        label: "英译中",
+        value: "英译中"
+      },
+      {
+        label: "法译中",
+        value: "法译中"
+      },
+      {
+        label: "德译中",
+        value: "德译中"
+      },
+      {
+        label: "韩译中",
+        value: "韩译中"
+      },
+      {
+        label: "日译中",
+        value: "日译中"
+      },
+      {
+        label: "俄译中",
+        value: "翻译俄译中"
+      },
+      {
+        label: "西译中",
+        value: "西译中"
+      }
+    ]
+  }
+]

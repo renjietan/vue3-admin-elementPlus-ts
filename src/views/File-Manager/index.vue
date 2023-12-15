@@ -33,13 +33,7 @@
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item command="英译中">英译中</el-dropdown-item>
-                  <el-dropdown-item command="法译中">法译中</el-dropdown-item>
-                  <el-dropdown-item command="德译中">德译中</el-dropdown-item>
-                  <el-dropdown-item command="韩译中">韩译中</el-dropdown-item>
-                  <el-dropdown-item command="日译中">日译中</el-dropdown-item>
-                  <el-dropdown-item command="俄译中">俄译中</el-dropdown-item>
-                  <el-dropdown-item command="西译中">西译中</el-dropdown-item>
+                  <el-dropdown-item v-for="item in _t.opt_conf.lan_opt" command="英译中">英译中</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -123,13 +117,16 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { getRandomChineseWord, getRandomString } from "@/utils/mock-data/index.js"
+import { getRandomChineseWord, getRandomString, lan_opt } from "@/utils/mock-data/index.js"
 import { reactive, onMounted } from "vue"
 import TypeWriter from "@/components/TypeWriter/index.vue"
 
 const _t = reactive({
   flt: {
     text: ""
+  },
+  opt_conf: {
+    lan_opt,
   },
   table_conf: {
     data: [],
