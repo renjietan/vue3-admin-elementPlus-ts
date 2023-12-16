@@ -100,6 +100,34 @@ export const constantRoutes: RouteRecordRaw[] = [
         }
       }
     ]
+  },
+  {
+    path: "/config",
+    component: Layouts,
+    redirect: "/config/prompt",
+    name: "Config",
+    meta: {
+      title: "配置",
+      elIcon: "UserFilled"
+    },
+    children: [
+      {
+        path: "prompt",
+        component: () => import("@/views/config/prompt.vue"),
+        name: "prompt",
+        meta: {
+          title: "Prompt公共配置"
+        }
+      },
+      {
+        path: "one-to-one",
+        component: () => import("@/views/config/one-to-one.vue"),
+        name: "OneToOne",
+        meta: {
+          title: "问答对"
+        }
+      }
+    ]
   }
 ]
 

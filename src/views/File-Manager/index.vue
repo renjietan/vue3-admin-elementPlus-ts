@@ -8,6 +8,11 @@
           </template>
         </el-input>
       </div>
+      <div class="container-filter-right">
+        <el-upload class="upload-demo" :on-exceed="handleExceed">
+          <el-button icon="plus" type="primary">文件上传</el-button>
+        </el-upload>
+      </div>
     </div>
     <div class="container-content">
       <el-table border :data="_t.table_conf.data" align-center :row-class-name="tableRowClassName">
@@ -96,7 +101,7 @@
         </el-col>
         <el-col :span="12">
           <div class="fy_title">
-            <span style="--un-animation-delay:0.6s" class="animate-jump">
+            <span style="--un-animation-delay: 0.6s" class="animate-jump">
               {{ _t.form_data.right_title }}
             </span>
           </div>
@@ -126,7 +131,7 @@ const _t = reactive({
     text: ""
   },
   opt_conf: {
-    lan_opt,
+    lan_opt
   },
   table_conf: {
     data: [],
@@ -176,10 +181,10 @@ const tableRowClassName = ({ row, rowIndex }) => {
 onMounted(() => {
   _t.table_conf.data = Array.from({ length: 10 }).map((item) => ({
     isSc: false,
-    prop2: Math.random(),
-    prop3: Math.random(),
-    prop4: Math.random(),
-    prop5: Math.random()
+    prop1: getRandomChineseWord(8),
+    prop2: getRandomChineseWord(3),
+    prop3: getRandomChineseWord(3),
+    prop4: getRandomChineseWord(6)
   }))
 })
 </script>
