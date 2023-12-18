@@ -60,7 +60,7 @@ export const lan_opt = [
       },
       {
         label: "俄译中",
-        value: "翻译俄译中"
+        value: "俄译中"
       },
       {
         label: "西译中",

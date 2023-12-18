@@ -19,7 +19,7 @@ const props = defineProps({
   },
   width: {
     type: String,
-    default: "100%"
+    default: "calc(100% - 10px)"
   },
   height: {
     type: String,

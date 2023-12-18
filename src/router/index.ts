@@ -67,7 +67,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     redirect: "/file-manager",
     name: "File",
     meta: {
-      title: "文件管理",
+      title: "情报管理",
       elIcon: "Folder"
     },
     children: [
@@ -76,7 +76,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/File-Manager/index.vue"),
         name: "FileManager",
         meta: {
-          title: "文件管理"
+          title: "情报管理"
         }
       }
     ]

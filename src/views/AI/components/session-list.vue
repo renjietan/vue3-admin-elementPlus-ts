@@ -6,7 +6,7 @@
       type="primary"
       icon="Plus"
       plain
-      size="mini"
+      size="large"
     >
       new chat
     </el-button>

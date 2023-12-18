@@ -7,19 +7,30 @@
             <el-button icon="Search" />
           </template>
         </el-input>
+        <el-checkbox style="margin-left: 15px">收藏</el-checkbox>
       </div>
       <div class="container-filter-right">
-        <el-upload class="upload-demo" :on-exceed="handleExceed">
-          <el-button icon="plus" type="primary">文件上传</el-button>
-        </el-upload>
+        <el-button icon="plus" @click="handleDialog('情报上传')" type="primary">情报上传</el-button>
       </div>
     </div>
     <div class="container-content">
       <el-table border :data="_t.table_conf.data" align-center :row-class-name="tableRowClassName">
+        <el-table-column prop="prop1" width="70" label="序号">
+          <template #default="scope">
+            {{ scope.$index + 1 }}
+          </template>
+        </el-table-column>
         <el-table-column prop="prop1" label="文件名" />
         <el-table-column prop="prop2" label="主题" />
         <el-table-column prop="prop3" label="作者" />
         <el-table-column prop="prop4" label="关键词" />
+        <el-table-column prop="prop5" label="标签">
+          <template #default="scope">
+            <el-tag type="warning">
+              {{ scope.row.prop5 }}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="收藏">
           <template #default="scope">
             <SvgIcon
@@ -29,19 +40,11 @@
             ></SvgIcon>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="299">
           <template #default="scope">
-            <el-button type="primary" text bg @click="_t.dialog_conf.visiable = true">标签修改</el-button>
-            <el-dropdown trigger="click" @command="handleTransFormer">
-              <el-button text type="warning">
-                翻译<el-icon class="el-icon--right"><arrow-down /></el-icon>
-              </el-button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item v-for="item in _t.opt_conf.lan_opt" command="英译中">英译中</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
+            <el-button type="primary" text @click="handleDialog('标签修改')">标签修改</el-button>
+            <el-button @click="handleDialog('原文')" text type="warning"> 原文 </el-button>
+            <el-button @click="handleDialog('关系图谱')" text type="success"> 关系图谱 </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -58,30 +61,55 @@
       :destroy-on-close="_t.dialog_conf.isDestory"
       :draggable="_t.dialog_conf.draggable"
       :close-on-click-modal="_t.dialog_conf.closeOnClickModal"
+      :width="_t.dialog_conf.title == '翻译' || _t.dialog_conf.title == '原文' ? '1100px' : '600px'"
     >
-      <el-form>
+      <el-form label-width="120" inline v-if="_t.dialog_conf.title == '情报上传'">
+        <el-form-item class="must-fill" label="标签">
+          <el-select clearable></el-select>
+        </el-form-item>
+        <el-form-item class="must-fill" label="是否需要解压">
+          <el-radio-group>
+            <el-radio :label="1">是</el-radio>
+            <el-radio :label="0">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item class="must-fill" label="资料上传">
+          <el-upload
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :before-remove="beforeRemove"
+            multiple
+            :limit="3"
+            :on-exceed="handleExceed"
+            :file-list="fileList"
+          >
+            <el-button type="primary">点击上传</el-button>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <el-form v-else-if="_t.dialog_conf.title == '标签修改'">
         <el-form-item class="must-fill" label="标签">
           <el-select clearable></el-select>
         </el-form-item>
       </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="_t.dialog_conf.visiable = false">取消</el-button>
-          <el-button type="primary" @click="_t.dialog_conf.visiable = false">确定</el-button>
-        </span>
-      </template>
-    </el-dialog>
-    <!--NOTE(@date:2023-12-14 11:56:48 谭人杰): 翻译-->
-    <el-dialog
-      v-model="_t.dialog_conf_fy.visiable"
-      :title="_t.dialog_conf_fy.title"
-      :destroy-on-close="_t.dialog_conf_fy.isDestory"
-      :draggable="_t.dialog_conf_fy.draggable"
-      :close-on-click-modal="_t.dialog_conf_fy.closeOnClickModal"
-      width="1100"
-    >
-      <el-row :gutter="49">
-        <el-col :span="12">
+      <el-row v-else :gutter="49">
+        <el-col style="display: flex; justify-content: flex-end">
+          <el-dropdown trigger="click" @command="handleCommand">
+            <el-button text type="warning">
+              翻译<el-icon class="el-icon--right"><arrow-down /></el-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item v-for="item in _t.opt_conf.lan_opt" :command="item.value">
+                  {{ item.value }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </el-col>
+        <el-col :span="_t.dialog_conf.title == '翻译' ? 12 : 24">
           <div class="fy_title">
             {{ _t.form_data.left_title }}
           </div>
@@ -99,7 +127,7 @@
             {{ _t.form_data.old_text }}
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col v-if="_t.dialog_conf.title == '翻译'" :span="12">
           <div class="fy_title">
             <span style="--un-animation-delay: 0.6s" class="animate-jump">
               {{ _t.form_data.right_title }}
@@ -114,8 +142,8 @@
       </el-row>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="_t.dialog_conf_fy.visiable = false">取消</el-button>
-          <el-button type="primary" @click="_t.dialog_conf_fy.visiable = false">确定</el-button>
+          <el-button @click="_t.dialog_conf.visiable = false">取消</el-button>
+          <el-button type="primary" @click="_t.dialog_conf.visiable = false">确定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -131,7 +159,7 @@ const _t = reactive({
     text: ""
   },
   opt_conf: {
-    lan_opt
+    lan_opt: lan_opt?.[0]?.children ?? []
   },
   table_conf: {
     data: [],
@@ -141,14 +169,7 @@ const _t = reactive({
   },
   dialog_conf: {
     visiable: false,
-    title: "标签修改",
-    isDestory: false, //关闭前销毁
-    draggable: true, //拖拽
-    closeOnClickModal: false
-  },
-  dialog_conf_fy: {
-    visiable: false,
-    title: "翻译",
+    title: "",
     isDestory: false, //关闭前销毁
     draggable: true, //拖拽
     closeOnClickModal: false
@@ -161,7 +182,13 @@ const _t = reactive({
   }
 })
 
-const handleTransFormer = (v) => {
+const handleDialog = (title) => {
+  _t.dialog_conf.visiable = true
+  _t.dialog_conf.title = title
+}
+
+const handleCommand = (v) => {
+  _t.dialog_conf.title = "翻译"
   _t.form_data.text = getRandomChineseWord(100)
   _t.form_data.old_text = getRandomString(1000)
   _t.form_data.left_title = v?.split("译")?.[0] ?? ""
@@ -184,7 +211,8 @@ onMounted(() => {
     prop1: getRandomChineseWord(8),
     prop2: getRandomChineseWord(3),
     prop3: getRandomChineseWord(3),
-    prop4: getRandomChineseWord(6)
+    prop4: getRandomChineseWord(6),
+    prop5: getRandomChineseWord(3)
   }))
 })
 </script>

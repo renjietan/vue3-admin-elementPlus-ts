@@ -49,6 +49,9 @@ const handleSwitchTab = (v) => {
     overflow: hidden;
     :deep(.el-tabs) {
       height: calc(100% - 40px);
+      .el-tabs__new-tab {
+        visibility: hidden;
+      }
       .el-tabs__content {
         height: calc(100% - 55px);
       }

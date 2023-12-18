@@ -2,18 +2,20 @@
   <div class="container-right-action">
     <el-input @keyup.enter="handleEnter" v-model="_t.cur_chat_text" clearable>
       <template #prepend>
-        <el-select placeholder="类型" style="width: 115px">
-          <!-- <el-option label="Restaurant" value="1" /> -->
-        </el-select>
+        <el-upload
+          ref="upload"
+          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          :limit="1"
+          :on-exceed="handleExceed"
+          :auto-upload="false"
+        >
+          <!-- <el-button icon="plus" size="large" type="primary"></el-button> -->
+        </el-upload>
+      </template>
+      <template #append>
+        <el-button type="primary" icon="position"></el-button>
       </template>
     </el-input>
-    <el-cascader
-      placeholder="辅助功能"
-      clearable
-      v-model="_t.lan"
-      :options="_t.opt_conf.lan_opt"
-      @change="handleCascader"
-    />
     <el-dialog
       v-model="_t.dialog_conf.visiable"
       :title="_t.dialog_conf.title"
@@ -68,6 +70,36 @@
         </span>
       </template>
     </el-dialog>
+    <Teleport to="body">
+      <div @click="_t.drawer_conf.visiable = true" class="settings">
+        <el-icon color="white" size="20"><Setting /></el-icon>
+      </div>
+    </Teleport>
+    <el-drawer v-model="_t.drawer_conf.visiable" :title="_t.drawer_conf.title" :direction="_t.drawer_conf.direction">
+      <el-divider content-position="left">Prompt配置</el-divider>
+      <el-row>
+        <el-col class="drawer-list" v-for="item in 3">
+          <div class="drawer-list-item">
+            <el-checkbox :label="`prompt配置${item}`" size="large" />
+          </div>
+        </el-col>
+      </el-row>
+      <el-divider
+        style="cursor: pointer"
+        @click="_t.drawer_conf.isSpread = !_t.drawer_conf.isSpread"
+        content-position="left"
+        >新增Prompt临时配置<el-icon style="margin-left: 10px"><ArrowDown /></el-icon
+      ></el-divider>
+      <div v-if="_t.drawer_conf.isSpread">
+        <el-form>
+          <el-form-item v-for="(item, index) in _t.drawer_conf.list" label="内容">
+            <div style="display: flex; align-items: center">
+              <el-input />
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
@@ -80,6 +112,13 @@ import Bus from "@/utils/bus.ts"
 const _t = reactive({
   cur_chat_text: "",
   lan: "",
+  drawer_conf: {
+    title: "配置",
+    visiable: false,
+    direction: "rtl",
+    isSpread: false,
+    list: [{}]
+  },
   dialog_conf: {
     visiable: false,
     title: "翻译",
@@ -109,12 +148,32 @@ const handleCascader = (v) => {
 }
 
 const handleEnter = (e) => {
-  Bus.$emit('enter-text', _t.cur_chat_text)
-  _t.cur_chat_text = ''
+  Bus.emit("enter-text", _t.cur_chat_text)
+  _t.cur_chat_text = ""
 }
 </script>
 
 <style scoped lang="scss">
+.drawer-list {
+  margin-bottom: 10px;
+  .drawer-list-item {
+    padding: 0 15px;
+    background: var(--el-fill-color);
+  }
+}
+
+.settings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: var(--el-color-primary);
+  position: fixed;
+  right: 0;
+  top: 50%;
+  margin-top: -100px;
+  cursor: pointer;
+}
 .container-right-action {
   height: 40px;
   display: flex;

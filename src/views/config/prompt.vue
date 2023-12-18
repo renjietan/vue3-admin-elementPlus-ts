@@ -71,7 +71,6 @@
 <script lang="ts" setup>
 import { getRandomChineseWord, getRandomString, lan_opt } from "@/utils/mock-data/index.js"
 import { reactive, onMounted } from "vue"
-import TypeWriter from "@/components/TypeWriter/index.vue"
 
 const _t = reactive({
   flt: {

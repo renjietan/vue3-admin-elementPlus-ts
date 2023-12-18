@@ -1,28 +1,5 @@
-type $bus = {
-  $on: (name: string, callback: Function) => void
-  $emit: (name: string) => void
-}
-type ParamKey = string | number | symbol
-type List = {
-  [key: ParamKey]: Array<Function>
-}
+import mitt from "mitt"
 
-class Bus implements $bus {
-  list: List
-  constructor() {
-    this.list = [] as unknown as List
-  }
-  $emit(name: string, ...args: Array<any>) {
-    const events: Array<Function> = this.list[name] || []
-    events.forEach((fn) => {
-      fn.apply(this, args)
-    })
-  }
-  $on(name: string, callback: Function) {
-    const fn: Array<Function> = this.list[name] || []
-    fn.push(callback)
-    this.list[name] = fn
-  }
-}
+const bus = mitt()
 
-export default new Bus()
+export default bus

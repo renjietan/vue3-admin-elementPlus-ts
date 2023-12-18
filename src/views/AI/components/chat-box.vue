@@ -1,5 +1,17 @@
 <template>
   <div class="container-right-chat" ref="chatList">
+    <div style="display: flex; justify-content: flex-end">
+      <el-dropdown>
+        <el-icon style="font-size: 30px; color: var(--el-color-primary); float: right"><UploadFilled /></el-icon>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>下载为doc</el-dropdown-item>
+            <el-dropdown-item>下载为pdf</el-dropdown-item>
+            <el-dropdown-item>下载为txt</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
     <div class="container-right-chat-item" v-for="(item, index) in _t.cur_chat_list">
       <div class="container-right-chat-item-icon">
         <SvgIcon style="font-size: 28px" :name="item.issuer == 1 ? 'user' : 'jqr'"></SvgIcon>
@@ -11,19 +23,18 @@
         </div>
         <div class="container-right-chat-item-content-label2" v-if="item.issuer == 2">
           <div style="width: 100%">
-            <TypeWriter style="background-color: transparent; margin: 10px;" :text="item.text" height="100%"></TypeWriter>
+            <TypeWriter
+              style="background-color: transparent; margin: 10px"
+              :text="item.text"
+              height="100%"
+            ></TypeWriter>
           </div>
-          <!-- <span>{{ item.text }}</span> -->
           <div @click="item.isMore = !item.isMore" class="container-right-chat-item-content-label2-from">
-            <span>文档出处</span>
+            <span>情报资料出处</span>
             <el-icon style="margin-left: 4px"><ArrowDown /></el-icon>
           </div>
           <div style="clear: both"></div>
-          <div
-            class="container-right-chat-item-content-label2"
-            style="background-color: #fff; margin-top: 20px"
-            v-if="item.isMore"
-          >
+          <div class="container-right-chat-item-content-label2" style="background-color: #fff" v-if="item.isMore">
             <el-collapse accordion>
               <el-collapse-item :name="i" v-for="(e, i) in item.from_text">
                 <template #title>
@@ -38,7 +49,7 @@
                   <el-link style="margin-top: 10px" type="primary">路径：{{ e.path }}</el-link>
                 </div>
                 <div style="text-align: right">
-                  <el-link style="margin-top: 13px" type="primary">查看原文</el-link>
+                  <el-link @click="handleDialog" style="margin-top: 13px" type="primary">查看原文</el-link>
                 </div>
               </el-collapse-item>
             </el-collapse>
@@ -53,13 +64,12 @@
 import TypeWriter from "@/components/TypeWriter/index.vue"
 import { ref, reactive, defineEmits, defineProps } from "vue"
 import { getRandomChineseWord, getRandomString, lan_opt } from "@/utils/mock-data/index.ts"
-
 import Bus from "@/utils/bus.ts"
 const _t = reactive({
   cur_chat_list: []
 })
 const _props = defineProps({})
-Bus.$on("enter-text", (v) => {
+Bus.on("enter-text", (v) => {
   _t.cur_chat_list.push({
     issuer: 1, // 1、用户 2、机器人
     text: v
@@ -68,7 +78,7 @@ Bus.$on("enter-text", (v) => {
   _t.cur_chat_list.push({
     issuer: 2, // 1、用户 2、机器人
     isMore: false,
-    text: getRandomChineseWord(240),
+    text: getRandomChineseWord(200),
     from_text: Array.from({ length: 5 }).map((item) => ({
       title: getRandomChineseWord(20) + ".txt",
       content: getRandomChineseWord(340),
@@ -112,7 +122,7 @@ Bus.$on("enter-text", (v) => {
 
         &-from {
           text-align: right;
-          margin-top: 10px;
+          margin: 10px 20px 20px 0;
           font-weight: bold;
           padding: 2px 15px;
           border: 1px solid rgba(112, 129, 164, 0.7);
