@@ -54,14 +54,15 @@
       v-model:page.sync="_t.table_conf.page"
       v-model:pageSize.sync="_t.table_conf.pageSize"
     ></Pagination>
-    <!--NOTE(@date:2023-12-14 11:56:36 谭人杰): 标签修改-->
+    <!--NOTE(@date:2023-12-14 11:56:36 谭人杰): 弹窗-->
     <el-dialog
+      @opened="handleDialogOpened"
       v-model="_t.dialog_conf.visiable"
       :title="_t.dialog_conf.title"
       :destroy-on-close="_t.dialog_conf.isDestory"
       :draggable="_t.dialog_conf.draggable"
       :close-on-click-modal="_t.dialog_conf.closeOnClickModal"
-      :width="_t.dialog_conf.title == '翻译' || _t.dialog_conf.title == '原文' ? '1100px' : '600px'"
+      :width="['原文', '翻译', '关系图谱'].some((e) => e == _t.dialog_conf.title) ? '1100px' : '600px'"
     >
       <el-form label-width="120" inline v-if="_t.dialog_conf.title == '情报上传'">
         <el-form-item class="must-fill" label="标签">
@@ -94,7 +95,7 @@
           <el-select clearable></el-select>
         </el-form-item>
       </el-form>
-      <el-row v-else :gutter="49">
+      <el-row v-else-if="_t.dialog_conf.title == '原文' || _t.dialog_conf.title == '翻译'" :gutter="49">
         <el-col style="display: flex; justify-content: flex-end">
           <el-dropdown trigger="click" @command="handleCommand">
             <el-button text type="warning">
@@ -140,6 +141,14 @@
           ></TypeWriter>
         </el-col>
       </el-row>
+      <el-row style="height: 80vh" v-else-if="_t.dialog_conf.title == '关系图谱'">
+        <RelationGraph
+          ref="$relationGraph"
+          :options="_t.opt_conf.graphOptions"
+          :on-node-click="onNodeClick"
+          :on-line-click="onLineClick"
+        />
+      </el-row>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="_t.dialog_conf.visiable = false">取消</el-button>
@@ -150,16 +159,22 @@
   </div>
 </template>
 <script lang="ts" setup>
+import RelationGraph from "relation-graph/vue3"
 import { getRandomChineseWord, getRandomString, lan_opt } from "@/utils/mock-data/index.js"
-import { reactive, onMounted } from "vue"
+import { reactive, onMounted, ref, nextTick } from "vue"
 import TypeWriter from "@/components/TypeWriter/index.vue"
-
+const $relationGraph = ref<RelationGraph>(null)
 const _t = reactive({
   flt: {
     text: ""
   },
   opt_conf: {
-    lan_opt: lan_opt?.[0]?.children ?? []
+    lan_opt: lan_opt?.[0]?.children ?? [],
+    graphOptions: {
+      allowSwitchLineShape: true,
+      allowSwitchJunctionPoint: true,
+      defaultJunctionPoint: "border"
+    }
   },
   table_conf: {
     data: [],
@@ -203,6 +218,38 @@ const tableRowClassName = ({ row, rowIndex }) => {
     return "success-row"
   }
   return ""
+}
+
+const handleDialogOpened = () => {
+  //需要指定 节点参数和连接线的参数
+  var __graph_json_data = {
+    rootId: "a",
+    nodes: [
+      // node配置选项：http://relation-graph.com/#/docs/node
+      // node支持通过插槽slot完全自定义，示例：http://relation-graph.com/#/demo/adv-slot
+      { id: "a", text: "甲方1", borderColor: "yellow" },
+      { id: "b", text: "甲方2", color: "#43a2f1", fontColor: "yellow" },
+      { id: "c", text: "甲方3", nodeShape: 1, width: 80, height: 60 },
+      { id: "e", text: "甲方4", nodeShape: 0, width: 150, height: 150 }
+    ],
+    lines: [
+      // link配置选项：http://relation-graph.com/#/docs/link
+      { from: "a", to: "b", text: "关系1", color: "#43a2f1" },
+      { from: "a", to: "c", text: "关系2" },
+      { from: "a", to: "e", text: "关系3" },
+      { from: "b", to: "e", color: "#67C23A" }
+    ]
+  }
+  nextTick(() => {
+    $relationGraph.value.setJsonData(__graph_json_data)
+  })
+}
+
+const onNodeClick = (nodeObject, $event) => {
+  console.log("onNodeClick:", nodeObject)
+}
+const onLineClick = (linkObject, $event) => {
+  console.log("onLineClick:", linkObject)
 }
 
 onMounted(() => {
